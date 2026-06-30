@@ -18,7 +18,7 @@ REQUIRED_FILES = [
 
 
 def read_text(path: Path) -> str:
-    return path.read_text(encoding="utf-8", errors="ignore")
+    return path.read_text(encoding="utf-8-sig", errors="ignore")
 
 
 def sanitize_label(value: str) -> str:
@@ -63,7 +63,7 @@ def parse_reader_sizes_by_function(
 
     for path in sorted(pix_dir.glob("*.cpp")):
         current_function: str | None = None
-        with path.open("r", encoding="utf-8", errors="ignore") as handle:
+        with path.open("r", encoding="utf-8-sig", errors="ignore") as handle:
             for line_number, line in enumerate(handle, 1):
                 function_match = function_re.search(line)
                 if function_match:
@@ -201,7 +201,7 @@ def parse_pso_definitions(pix_dir: Path) -> dict[str, Any]:
     psos: list[dict[str, Any]] = []
     current: dict[str, Any] | None = None
 
-    with path.open("r", encoding="utf-8", errors="ignore") as handle:
+    with path.open("r", encoding="utf-8-sig", errors="ignore") as handle:
         for line_number, line in enumerate(handle, 1):
             function_match = function_re.search(line)
             if function_match:
@@ -332,7 +332,7 @@ def parse_command_events(pix_dir: Path, limit: int = 120) -> dict[str, Any]:
     draw_indexed: list[dict[str, Any]] = []
 
     for path in sorted(pix_dir.glob("CommandLists_*.cpp")):
-        with path.open("r", encoding="utf-8", errors="ignore") as handle:
+        with path.open("r", encoding="utf-8-sig", errors="ignore") as handle:
             for line_number, line in enumerate(handle, 1):
                 set_pso_match = set_pso_re.search(line)
                 if set_pso_match:

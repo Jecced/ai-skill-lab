@@ -4,14 +4,15 @@ Use this checklist when turning a PIX C++ export into a named render pass, resou
 
 ## Stable First Pass
 
-1. Run the indexer and keep both Markdown and JSON outputs.
-2. Record the export path, label, tool command, and generated report path.
-3. Identify candidate events from command shape only:
+1. If starting from `.wpix`, run `scripts/pix_wpix_tool.py prepare` to produce the event list, C++ export, and index. If starting from an existing export, run the indexer directly.
+2. Keep both Markdown and JSON index outputs.
+3. Record the capture/export path, label, tool command, `pixtool.exe` path when used, and generated report path.
+4. Identify candidate events from command shape only:
    - `Dispatch(x,y,z)`
    - `ExecuteIndirect`
    - `DrawIndexedInstanced`
    - barriers and transitions around the candidate event
-4. Record the command list file, line, command list object id, nearby comments, current PSO, and current root parameters.
+5. Record the command list file, line, command list object id, nearby comments, current PSO, and current root parameters.
 
 ## Closure Table
 
@@ -31,3 +32,4 @@ Use this checklist when turning a PIX C++ export into a named render pass, resou
 - Do not name a pass from dispatch dimensions alone.
 - Keep uncertainty explicit. `candidate` is better than a precise but unsupported name.
 - When visual output looks wrong, revisit the producing pass and resource evidence before changing the consuming runtime.
+- `pixtool save-resource` covers event/marker RTV and depth exports. Treat arbitrary buffer/texture exports and Resource History as GUI-only or replay-patch work unless another verified tool is available.
