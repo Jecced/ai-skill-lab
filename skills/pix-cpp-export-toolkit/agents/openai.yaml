@@ -1,0 +1,4 @@
+interface:
+  display_name: "PIX C++ Export Toolkit"
+  short_description: "Index PIX C++ replay exports and build evidence chains"
+  default_prompt: "Use $pix-cpp-export-toolkit to index a PIX C++ export, inspect PSO/command/resource evidence, and plan the next reverse-analysis step."

@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "updated_utc": "2026-06-30",
+  "tools": [
+    {
+      "id": "dxc",
+      "commands": ["dxc"],
+      "purpose": "Compile HLSL, inspect DXIL/DXBC containers, dump resource tables and DXIL disassembly.",
+      "sources": [
+        {
+          "type": "github_release",
+          "repo": "microsoft/DirectXShaderCompiler",
+          "homepage": "https://github.com/microsoft/DirectXShaderCompiler",
+          "latest_release_api": "https://api.github.com/repos/microsoft/DirectXShaderCompiler/releases/latest",
+          "latest_checked_tag": "v1.9.2602.24",
+          "latest_checked_url": "https://github.com/microsoft/DirectXShaderCompiler/releases/tag/v1.9.2602.24",
+          "asset_patterns": {
+            "win-x64": "^dxc_.*\\.zip$",
+            "linux-x64": "^linux_dxc_.*\\.x86_64\\.tar\\.gz$"
+          }
+        },
+        {
+          "type": "system_fallback",
+          "platform": "win-x64",
+          "name": "Windows SDK dxc",
+          "probe_globs": [
+            "C:/Program Files (x86)/Windows Kits/10/bin/*/x64/dxc.exe"
+          ]
+        }
+      ],
+      "install_hints": {
+        "macos": [
+          "No current official macOS binary asset was present in the checked DXC release. Prefer source build or a trusted package manager formula when available."
+        ]
+      }
+    },
+    {
+      "id": "spirv-cross",
+      "commands": ["spirv-cross"],
+      "purpose": "Reflect SPIR-V and cross-compile SPIR-V to readable HLSL, GLSL, MSL, or JSON reflection.",
+      "sources": [
+        {
+          "type": "github",
+          "repo": "KhronosGroup/SPIRV-Cross",
+          "homepage": "https://github.com/KhronosGroup/SPIRV-Cross",
+          "releases": "https://github.com/KhronosGroup/SPIRV-Cross/releases",
+          "tags": "https://github.com/KhronosGroup/SPIRV-Cross/tags"
+        },
+        {
+          "type": "package_manager",
+          "platforms": ["macos", "linux"],
+          "commands": [
+            "brew install spirv-cross",
+            "apt install spirv-cross"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "glslang",
+      "commands": ["glslangValidator"],
+      "purpose": "Compile GLSL/HLSL to SPIR-V and validate frontend shader source behavior.",
+      "sources": [
+        {
+          "type": "github",
+          "repo": "KhronosGroup/glslang",
+          "homepage": "https://github.com/KhronosGroup/glslang",
+          "latest_release_api": "https://api.github.com/repos/KhronosGroup/glslang/releases/latest",
+          "latest_checked_tag": "16.3.0",
+          "latest_checked_url": "https://github.com/KhronosGroup/glslang/releases/tag/16.3.0"
+        },
+        {
+          "type": "vulkan_sdk",
+          "homepage": "https://vulkan.lunarg.com/sdk/home",
+          "commands": ["glslangValidator"]
+        }
+      ]
+    },
+    {
+      "id": "spirv-tools",
+      "commands": ["spirv-dis", "spirv-val", "spirv-as", "spirv-opt"],
+      "purpose": "Validate, disassemble, assemble, and optimize SPIR-V modules.",
+      "sources": [
+        {
+          "type": "github",
+          "repo": "KhronosGroup/SPIRV-Tools",
+          "homepage": "https://github.com/KhronosGroup/SPIRV-Tools",
+          "latest_release_api": "https://api.github.com/repos/KhronosGroup/SPIRV-Tools/releases/latest",
+          "latest_checked_tag": "v2026.2",
+          "latest_checked_url": "https://github.com/KhronosGroup/SPIRV-Tools/releases/tag/v2026.2"
+        },
+        {
+          "type": "vulkan_sdk",
+          "homepage": "https://vulkan.lunarg.com/sdk/home",
+          "commands": ["spirv-dis", "spirv-val", "spirv-as", "spirv-opt"]
+        }
+      ]
+    },
+    {
+      "id": "dxil-spirv",
+      "commands": ["dxil-spirv"],
+      "purpose": "Convert DXIL to SPIR-V when the pipeline benefits from SPIR-V reflection/cross-compilation.",
+      "sources": [
+        {
+          "type": "github_source",
+          "repo": "HansKristian-Work/dxil-spirv",
+          "homepage": "https://github.com/HansKristian-Work/dxil-spirv",
+          "default_branch": "master",
+          "latest_release_api": null,
+          "note": "No GitHub releases or tags were present when checked; treat as source/build dependency."
+        }
+      ]
+    },
+    {
+      "id": "shader-conductor",
+      "commands": ["ShaderConductorCmd"],
+      "purpose": "Optional multi-backend shader translation wrapper built around DXC/SPIRV-Cross concepts.",
+      "sources": [
+        {
+          "type": "github",
+          "repo": "microsoft/ShaderConductor",
+          "homepage": "https://github.com/microsoft/ShaderConductor",
+          "releases": "https://github.com/microsoft/ShaderConductor/releases"
+        }
+      ],
+      "optional": true
+    }
+  ]
+}
