@@ -1,0 +1,5 @@
+.pix-analysis/
+vendor-tools/**/downloads/
+vendor-tools/**/toolchain.local.json
+**/__pycache__/
+*.pyc
