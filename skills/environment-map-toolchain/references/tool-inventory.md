@@ -4,9 +4,9 @@ This skill is tool-source agnostic. The repository includes a portable binary su
 
 ## Candidate Tools
 
-| Capability | Candidate executable | Common source-relative paths |
+| Capability | Windows paths | macOS paths |
 | --- | --- | --- |
-| Cubemap filtering / environment map preprocessing | `cmftRelease64.exe` | `cmft\cmftRelease64.exe` |
+| Cubemap filtering / environment map preprocessing | `cmft\cmftRelease64.exe` | `macos/cmft/cmftRelease64` |
 
 ## Search Roots
 
@@ -16,6 +16,8 @@ The helper script searches in this order:
 2. `ENVMAP_TOOLCHAIN_ROOT`
 3. `AI_SKILL_LAB_TOOL_ROOT`
 4. `VENDOR_TOOLS_ROOT`
+
+Set `AI_SKILL_LAB_PLATFORM=macos` or `AI_SKILL_LAB_PLATFORM=windows` to simulate platform-specific discovery from another OS.
 
 ## Vendoring Rule
 

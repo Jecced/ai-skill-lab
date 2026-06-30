@@ -13,12 +13,26 @@ from typing import Iterable
 
 
 TOOLS = {
-    "cmft": [Path("cmft/cmftRelease64.exe"), Path("cmftRelease64.exe")],
+    "cmft": {
+        "windows": [Path("cmft/cmftRelease64.exe"), Path("cmftRelease64.exe")],
+        "macos": [Path("macos/cmft/cmftRelease64"), Path("cmftRelease64"), Path("cmft")],
+    },
 }
 
 
 def repo_root() -> Path:
     return Path(__file__).resolve().parents[3]
+
+
+def current_platform() -> str:
+    override = os.environ.get("AI_SKILL_LAB_PLATFORM")
+    if override in {"windows", "macos", "linux"}:
+        return override
+    if os.name == "nt":
+        return "windows"
+    if sys.platform == "darwin":
+        return "macos"
+    return "linux"
 
 
 def dedupe_paths(paths: Iterable[Path]) -> list[Path]:
@@ -30,6 +44,14 @@ def dedupe_paths(paths: Iterable[Path]) -> list[Path]:
             seen.add(key)
             result.append(path)
     return result
+
+
+def candidate_relatives(relatives_by_platform: dict[str, list[Path]]) -> list[Path]:
+    preferred = current_platform()
+    result: list[Path] = []
+    for platform in (preferred, "any"):
+        result.extend(relatives_by_platform.get(platform, []))
+    return dedupe_paths(result)
 
 
 def candidate_roots() -> list[Path]:
@@ -45,15 +67,15 @@ def candidate_roots() -> list[Path]:
 def discover() -> dict[str, object]:
     roots = candidate_roots()
     tools: dict[str, dict[str, object]] = {}
-    for name, relatives in TOOLS.items():
+    for name, relatives_by_platform in TOOLS.items():
         matches = []
         for root in roots:
-            for rel in relatives:
+            for rel in candidate_relatives(relatives_by_platform):
                 path = root / rel
                 if path.is_file():
                     matches.append(str(path))
         tools[name] = {"found": bool(matches), "paths": matches}
-    return {"roots": [str(root) for root in roots], "tools": tools}
+    return {"platform": current_platform(), "roots": [str(root) for root in roots], "tools": tools}
 
 
 def command_line(args: list[str]) -> str:
@@ -119,6 +141,7 @@ def print_result(data: dict[str, object], as_json: bool) -> None:
         print(json.dumps(data, indent=2))
         return
     if "tools" in data:
+        print(f"Platform: {data['platform']}")
         print("Search roots:")
         for root in data["roots"]:  # type: ignore[index]
             print(f"  {root}")

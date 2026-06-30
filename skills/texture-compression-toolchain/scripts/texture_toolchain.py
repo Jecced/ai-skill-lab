@@ -17,25 +17,78 @@ from typing import Iterable
 
 
 TOOLS = {
-    "astcenc": [
-        Path("astc-encoder/astcenc.exe"),
-        Path("mali_win32/astcenc.exe"),
-        Path("astcenc.exe"),
-    ],
-    "etcpack": [Path("mali_win32/etcpack.exe"), Path("etcpack.exe")],
-    "mali_convert": [Path("mali_win32/convert.exe"), Path("convert.exe")],
-    "mali_composite": [Path("mali_win32/composite.exe"), Path("composite.exe")],
-    "pvrtex": [Path("PVRTexTool_win32/PVRTexToolCLI.exe"), Path("PVRTexToolCLI.exe")],
-    "pvr_compare": [Path("PVRTexTool_win32/compare.exe"), Path("compare.exe")],
-    "cwebp": [Path("libwebp_win32/bin/cwebp.exe"), Path("cwebp.exe")],
-    "dwebp": [Path("libwebp_win32/bin/dwebp.exe"), Path("dwebp.exe")],
-    "webpinfo": [Path("libwebp_win32/bin/webpinfo.exe"), Path("webpinfo.exe")],
-    "webpmux": [Path("libwebp_win32/bin/webpmux.exe"), Path("webpmux.exe")],
+    "astcenc": {
+        "windows": [
+            Path("astc-encoder/astcenc.exe"),
+            Path("mali_win32/astcenc.exe"),
+            Path("astcenc.exe"),
+        ],
+        "macos": [
+            Path("macos/astc-encoder/astcenc"),
+            Path("macos/mali_darwin/astcenc"),
+            Path("astcenc"),
+        ],
+    },
+    "etcpack": {
+        "windows": [Path("mali_win32/etcpack.exe"), Path("etcpack.exe")],
+        "macos": [Path("macos/mali_darwin/etcpack"), Path("etcpack")],
+    },
+    "mali_convert": {
+        "windows": [Path("mali_win32/convert.exe"), Path("convert.exe")],
+        "macos": [Path("macos/mali_darwin/convert"), Path("convert")],
+    },
+    "mali_composite": {
+        "windows": [Path("mali_win32/composite.exe"), Path("composite.exe")],
+        "macos": [Path("macos/mali_darwin/composite"), Path("composite")],
+    },
+    "pvrtex": {
+        "windows": [Path("PVRTexTool_win32/PVRTexToolCLI.exe"), Path("PVRTexToolCLI.exe")],
+        "macos": [Path("macos/PVRTexTool_darwin/PVRTexToolCLI"), Path("PVRTexToolCLI")],
+    },
+    "pvr_compare": {
+        "windows": [Path("PVRTexTool_win32/compare.exe"), Path("compare.exe")],
+        "macos": [Path("macos/PVRTexTool_darwin/compare"), Path("compare")],
+    },
+    "cwebp": {
+        "windows": [Path("libwebp_win32/bin/cwebp.exe"), Path("cwebp.exe")],
+        "macos": [Path("macos/libwebp_darwin/bin/cwebp"), Path("cwebp")],
+    },
+    "dwebp": {
+        "windows": [Path("libwebp_win32/bin/dwebp.exe"), Path("dwebp.exe")],
+        "macos": [Path("dwebp")],
+    },
+    "webpinfo": {
+        "windows": [Path("libwebp_win32/bin/webpinfo.exe"), Path("webpinfo.exe")],
+        "macos": [Path("webpinfo")],
+    },
+    "webpmux": {
+        "windows": [Path("libwebp_win32/bin/webpmux.exe"), Path("webpmux.exe")],
+        "macos": [Path("webpmux")],
+    },
 }
 
 
 def repo_root() -> Path:
     return Path(__file__).resolve().parents[3]
+
+
+def current_platform() -> str:
+    override = os.environ.get("AI_SKILL_LAB_PLATFORM")
+    if override in {"windows", "macos", "linux"}:
+        return override
+    if os.name == "nt":
+        return "windows"
+    if sys.platform == "darwin":
+        return "macos"
+    return "linux"
+
+
+def candidate_relatives(relatives_by_platform: dict[str, list[Path]]) -> list[Path]:
+    preferred = current_platform()
+    result: list[Path] = []
+    for platform in (preferred, "any"):
+        result.extend(relatives_by_platform.get(platform, []))
+    return dedupe_paths(result)
 
 
 def candidate_roots() -> list[Path]:
@@ -62,15 +115,15 @@ def dedupe_paths(paths: Iterable[Path]) -> list[Path]:
 def discover() -> dict[str, object]:
     roots = candidate_roots()
     tools: dict[str, dict[str, object]] = {}
-    for name, relatives in TOOLS.items():
+    for name, relatives_by_platform in TOOLS.items():
         matches = []
         for root in roots:
-            for rel in relatives:
+            for rel in candidate_relatives(relatives_by_platform):
                 path = root / rel
                 if path.is_file():
                     matches.append(str(path))
         tools[name] = {"found": bool(matches), "paths": matches}
-    return {"roots": [str(root) for root in roots], "tools": tools}
+    return {"platform": current_platform(), "roots": [str(root) for root in roots], "tools": tools}
 
 
 def command_line(args: list[str]) -> str:
@@ -165,6 +218,7 @@ def print_result(data: dict[str, object], as_json: bool) -> None:
         print(json.dumps(data, indent=2))
         return
     if "tools" in data:
+        print(f"Platform: {data['platform']}")
         print("Search roots:")
         for root in data["roots"]:  # type: ignore[index]
             print(f"  {root}")

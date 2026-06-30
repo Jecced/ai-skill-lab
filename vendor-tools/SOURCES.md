@@ -36,4 +36,34 @@ Original upstream: Microsoft DirectXShaderCompiler release `v1.9.2602.24`.
 
 Only the Windows x64 runtime subset was copied. Release archives, headers, libraries, symbols, and other architectures were intentionally left out.
 
+## 2026-06-30 macOS Toolchain Seed
+
+Copied from local source snapshot:
+
+`F:\download\toos\tools`
+
+The source path is provenance only. Runtime discovery should use the files under `vendor-tools/` by default.
+
+Copied subsets:
+
+- `texture-compression/macos/astc-encoder/astcenc`
+- `texture-compression/macos/mali_darwin/astcenc`
+- `texture-compression/macos/mali_darwin/etcpack`
+- `texture-compression/macos/mali_darwin/convert`
+- `texture-compression/macos/mali_darwin/composite`
+- `texture-compression/macos/PVRTexTool_darwin/PVRTexToolCLI`
+- `texture-compression/macos/PVRTexTool_darwin/compare`
+- `texture-compression/macos/libwebp_darwin/bin/cwebp`
+- `environment-map/macos/cmft/cmftRelease64`
+
+The copied macOS subset intentionally excludes `cmake`, quick-game packaging tools, `node_modules`, headers, libraries, docs, and unrelated native addons.
+
+Observed Mach-O architecture notes:
+
+- `environment-map/macos/cmft/cmftRelease64`: universal `x86_64` + `arm64`.
+- `texture-compression/macos/astc-encoder/astcenc`: universal, includes `arm64`.
+- `texture-compression/macos/libwebp_darwin/bin/cwebp`: universal `x86_64` + `arm64`.
+- `texture-compression/macos/mali_darwin/*`: `x86_64`.
+- `texture-compression/macos/PVRTexTool_darwin/*`: `x86_64`.
+
 Review license and redistribution terms before publishing this repository outside a private or internal context.
