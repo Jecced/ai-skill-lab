@@ -1,0 +1,4 @@
+interface:
+  display_name: "Environment Map Toolchain"
+  short_description: "Prepare cubemaps and filtered IBL assets"
+  default_prompt: "Use $environment-map-toolchain to prepare and validate environment map assets."

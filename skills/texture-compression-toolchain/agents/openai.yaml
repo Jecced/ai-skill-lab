@@ -1,0 +1,4 @@
+interface:
+  display_name: "Texture Compression Toolchain"
+  short_description: "Plan and run texture compression workflows"
+  default_prompt: "Use $texture-compression-toolchain to choose formats, run conversions, and validate output textures."
