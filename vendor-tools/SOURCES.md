@@ -36,6 +36,49 @@ Original upstream: Microsoft DirectXShaderCompiler release `v1.9.2602.24`.
 
 Only the Windows x64 runtime subset was copied. Release archives, headers, libraries, symbols, and other architectures were intentionally left out.
 
+## 2026-06-30 Android Platform-Tools
+
+Downloaded from the official Android SDK Platform-Tools Windows archive:
+
+`https://dl.google.com/android/repository/platform-tools-latest-windows.zip`
+
+Official release notes:
+
+`https://developer.android.com/tools/releases/platform-tools`
+
+Imported version:
+
+- `source.properties`: `Pkg.Revision=37.0.0`
+- `adb --version`: `Version 37.0.0-14910828`
+- ZIP SHA256: `4FE305812DB074CEA32903A489D061EB4454CBC90A49E8FEA677F4B7AF764918`
+
+Copied subset:
+
+- `adb/platform-tools/*`
+
+The official `platform-tools` folder was copied as a small complete runtime set because `adb.exe`, `fastboot.exe`, and helper tools depend on sibling DLLs, config files, and notices. The downloaded ZIP was not vendored.
+
+## Unity CLI Updater
+
+The `skills/unity-cli-skill` workflow downloads `unity-cli` binaries on demand from:
+
+`https://github.com/akiojin/unity-cli`
+
+Current release checked when the skill was created:
+
+- Release tag: `v0.12.0`
+- Release date: `2026-06-23T16:26:36Z`
+- License: MIT
+- Windows asset: `unity-cli-win-x64`
+- Manifest asset: `unity-cli-manifest.json`
+
+No `unity-cli` binary is committed by default. When `skills/unity-cli-skill/scripts/unity_cli_tool.py update-cli` is run with the default target, it writes the binary to:
+
+- `unity-cli/bin/unity-cli.exe` on Windows
+- `unity-cli/bin/unity-cli` on non-Windows platforms
+
+The updater verifies SHA256 from the upstream `unity-cli-manifest.json` and writes `unity-cli/VERSION.json`.
+
 ## 2026-06-30 macOS Toolchain Seed
 
 Copied from local source snapshot:

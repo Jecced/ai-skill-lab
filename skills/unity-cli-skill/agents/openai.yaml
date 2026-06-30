@@ -1,0 +1,4 @@
+interface:
+  display_name: "Unity CLI Skill"
+  short_description: "Thin gateway for unity-cli updates and calls"
+  default_prompt: "Use $unity-cli-skill to update unity-cli, sync upstream Unity skills, and plan safe Unity Editor commands."

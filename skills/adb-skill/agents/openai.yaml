@@ -1,0 +1,4 @@
+interface:
+  display_name: "ADB Skill"
+  short_description: "Use Android platform-tools safely"
+  default_prompt: "Use $adb-skill to inspect Android devices, collect logs, and plan safe adb commands."

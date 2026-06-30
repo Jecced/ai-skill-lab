@@ -1,0 +1,4 @@
+interface:
+  display_name: "CLI To Skill"
+  short_description: "Turn useful CLIs into reusable skills"
+  default_prompt: "Use $cli-to-skill to inspect a local CLI or tool snapshot and decide what belongs in vendor-tools."
