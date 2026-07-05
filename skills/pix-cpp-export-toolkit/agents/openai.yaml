@@ -1,4 +1,4 @@
 interface:
   display_name: "PIX C++ Export Toolkit"
-  short_description: "Prepare PIX captures and build replay evidence chains"
-  default_prompt: "Use $pix-cpp-export-toolkit to prepare a PIX .wpix capture or index a C++ export, then inspect PSO/command/resource evidence."
+  short_description: "Prepare PIX captures and extract replay evidence"
+  default_prompt: "Use $pix-cpp-export-toolkit to prepare a PIX .wpix capture or index a C++ export, then inspect PSO, command, resource, and shader evidence."

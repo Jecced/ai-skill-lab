@@ -14,6 +14,16 @@ Use this checklist when turning a PIX C++ export into a named render pass, resou
    - barriers and transitions around the candidate event
 5. Record the command list file, line, command list object id, nearby comments, current PSO, and current root parameters.
 
+## Event Id Mapping
+
+PIX GUI labels and replay C++ ids are easy to mix up. Keep all available anchors together:
+
+- GUI `Global ID` maps most directly to comments in `CommandLists_*.cpp`, such as `GlobalId = <n>`.
+- GUI `Queue ID` or `Command ID` is a PIX UI event coordinate. It is useful evidence, but it usually is not written directly as a replay C++ id.
+- C++ `GetCommandList(<id>)` is a D3D12 command list object id. Do not present it as a GUI Global ID.
+
+When the GUI Global ID is available, search it in `CommandLists_*.cpp` and record the line plus the following API call. When only Queue ID or Command ID is available, match by API name, adjacent events, current PSO, root constants, argument buffers, resource ids, and nearby barriers, then record the closest C++ file and line.
+
 ## Closure Table
 
 | Link | Required evidence | Common source | Status wording |
@@ -33,3 +43,4 @@ Use this checklist when turning a PIX C++ export into a named render pass, resou
 - Keep uncertainty explicit. `candidate` is better than a precise but unsupported name.
 - When visual output looks wrong, revisit the producing pass and resource evidence before changing the consuming runtime.
 - `pixtool save-resource` covers event/marker RTV and depth exports. Treat arbitrary buffer/texture exports and Resource History as GUI-only or replay-patch work unless another verified tool is available.
+- `pix_stream_extract.py` extracts frame-start replay payloads and PSO shader bytecode. It does not prove the later contents of resources that are written during the frame.

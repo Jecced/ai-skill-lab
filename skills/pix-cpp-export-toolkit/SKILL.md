@@ -1,6 +1,6 @@
 ---
 name: pix-cpp-export-toolkit
-description: Generic PIX on Windows .wpix capture and C++ export indexing workflow. Use when given a PIX on Windows capture path or replay export; when calling pixtool to export C++ replay projects, save event lists, save RTV/depth resources, or clarify PIX GUI automation limits; when analyzing exports containing CreatePSOs.cpp, CommandLists_*.cpp, FrameResources_000.cpp, CapturedAssets.h, and resources.bin; when reconstructing PSO, Dispatch, ExecuteIndirect, DrawIndexedInstanced, resourceReader read streams, resource offsets, shader bytecode evidence, or repeatable evidence reports without binding to a specific game or project.
+description: Generic PIX on Windows .wpix capture and C++ export workflow. Use when given a PIX on Windows capture path or replay export; when calling pixtool to export C++ replay projects, save event lists, save RTV/depth resources, or clarify PIX GUI automation limits; when analyzing exports containing CreatePSOs.cpp, CommandLists_*.cpp, FrameResources_000.cpp, CapturedAssets.h, and resources.bin; when reconstructing PSO, Dispatch, ExecuteIndirect, DrawIndexedInstanced, resourceReader read streams, resource offsets, shader bytecode evidence, decompressed resource initialization payloads, PSO shader blobs, or repeatable evidence reports without binding to a specific game or project.
 ---
 
 # PIX C++ Export Toolkit
@@ -26,7 +26,13 @@ Use this skill to turn a PIX on Windows `.wpix` capture or C++ export into a rep
 4. Read the generated `pix_cpp_export_index.md` first. Use the JSON next to it for scripting.
 5. Treat `Dispatch(32,32,1)`, `Dispatch(1,1,1)`, `ExecuteIndirect`, and `DrawIndexedInstanced` matches as candidates only.
 6. When extracting or naming resources, follow the `resourceReader` stream from `FrameResources_000.cpp`; do not infer a `resources.bin` offset by only scanning `CreateAndInitResource_*`.
-7. Record conclusions as `verified`, `candidate`, `inferred`, or `missing evidence`.
+7. If a PSO shader blob, resource initialization payload, or replay function read block is needed, read `references/stream-extraction.md`, then run:
+
+   ```powershell
+   python skills/pix-cpp-export-toolkit/scripts/pix_stream_extract.py --pix-dir "<PIX C++ export path>" --pso <id> --output-dir "<analysis output>"
+   ```
+
+8. Record conclusions as `verified`, `candidate`, `inferred`, or `missing evidence`.
 
 ## GUI Automation Boundary
 
@@ -36,8 +42,10 @@ Use `scripts/pix_wpix_tool.py save-resource` only for the `pixtool save-resource
 
 - `scripts/pix_wpix_tool.py`: discovers `pixtool.exe`, plans or runs `.wpix` to event-list/C++ export/index workflows, and wraps RTV/depth `save-resource`.
 - `scripts/pix_cpp_export_index.py`: indexes required files, reconstructs the `g_resourceReader->Read` stream, summarizes PSOs, scans command events, and writes Markdown/JSON reports.
+- `scripts/pix_stream_extract.py`: decompresses known `resources.bin` read blocks, extracts resource initialization payloads, splits PSO shader blobs by stage, and optionally runs `dxc -dumpbin`.
 - `references/pixtool-automation.md`: explains `.wpix` automation, CLI-supported GUI equivalents, and unsupported GUI-only surfaces.
 - `references/pix-cpp-export-structure.md`: explains the core files and why read-stream order matters.
+- `references/stream-extraction.md`: explains how to extract PSO shaders, resource payloads, or function read blocks and how to interpret the output.
 - `references/evidence-workflow.md`: generic evidence closure checklist for naming passes or resources.
 - `references/domain-adapter-guide.md`: how to add project-specific semantics without polluting this generic skill.
 
@@ -45,6 +53,6 @@ Use `scripts/pix_wpix_tool.py save-resource` only for the `pixtool save-resource
 
 - This skill does not require any specific project, game, or renderer.
 - PIX event ids, PSO ids, descriptor ids, resource ids, and root offsets can drift between captures. Re-index every new export.
-- The indexer does not decompress resource payloads. It gives stable offsets, PSO anchors, and command anchors for follow-up project-specific extraction tools.
+- The indexer gives stable offsets, PSO anchors, and command anchors. `pix_stream_extract.py` can decompress known stream blocks, but project-specific scripts are still needed to interpret many texture and buffer layouts.
 - `pixtool.exe` is an external PIX on Windows CLI, not a general PIX plugin SDK. This skill is a workflow/tool wrapper, not a PIX UI plugin.
 - Use `gpu-shader-toolkit` alongside this skill when inspecting DXIL/DXBC/SPIR-V shader bytecode emitted by the export.

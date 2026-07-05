@@ -22,3 +22,5 @@ PIX on Windows can export a capture as a replayable C++ project. The files are u
 4. Only when the current function is `CreateAndInitResource_<id>` should the current compressed offset be recorded as that resource block.
 
 If shader bytecode reads are skipped, later resource offsets can shift and any extracted payload can be wrong even when the resource id looks plausible.
+
+Use `scripts/pix_stream_extract.py` when the next step is to decompress a known PSO shader blob, resource initialization payload, or replay function read block. See `stream-extraction.md` for command shapes and interpretation boundaries.
