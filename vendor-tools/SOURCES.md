@@ -36,6 +36,36 @@ Original upstream: Microsoft DirectXShaderCompiler release `v1.9.2602.24`.
 
 Only the Windows x64 runtime subset was copied. Release archives, headers, libraries, symbols, and other architectures were intentionally left out.
 
+## 2026-07-10 GPU Shader Toolkit SPIR-V Runtime
+
+Copied from the installed RenderDoc 1.44 plugin snapshot:
+
+`C:\Program Files\RenderDoc\plugins\spirv`
+
+RenderDoc build: `v1.44`, commit `050034a0faa37d606ce1b8cf677dba4bc36984ea`.
+
+Copied subset:
+
+- `gpu-shader-toolkit/spirv/win-x64/renderdoc-1.44/bin/glslangValidator.exe`
+- `gpu-shader-toolkit/spirv/win-x64/renderdoc-1.44/bin/spirv-cross.exe`
+- `gpu-shader-toolkit/spirv/win-x64/renderdoc-1.44/bin/spirv-dis.exe`
+- `gpu-shader-toolkit/spirv/win-x64/renderdoc-1.44/bin/spirv-as.exe`
+- Upstream glslang, SPIRV-Cross, SPIRV-Tools, SPIRV-Headers, and RenderDoc license files
+- `gpu-shader-toolkit/spirv/win-x64/renderdoc-1.44/VERSION.json` with tool versions and SHA256 hashes
+
+Observed versions:
+
+- glslang `16.2.0`
+- SPIRV-Cross `vulkan-sdk-1.4.341.0-44-gaa6354c4`
+- SPIRV-Tools `v2026.1-91-g8d245e02`
+
+`spirv-val` and `spirv-opt` were not present and were intentionally not synthesized from unrelated binaries. The skill continues to discover them from an explicitly registered toolchain, PATH, or Vulkan SDK.
+
+Validation:
+
+- Each executable's version/help command succeeded from the vendored path.
+- `gpu_shader_tool.py list` resolves the four commands from the repository without a RenderDoc installation lookup.
+
 ## 2026-06-30 Android Platform-Tools
 
 Downloaded from the official Android SDK Platform-Tools Windows archive:

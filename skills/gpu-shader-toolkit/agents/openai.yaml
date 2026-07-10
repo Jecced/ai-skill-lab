@@ -1,4 +1,4 @@
 interface:
   display_name: "GPU Shader Toolkit"
-  short_description: "Shader reverse tools and workflows"
-  default_prompt: "Use $gpu-shader-toolkit to inspect shader binaries and set up cross-platform tooling."
+  short_description: "Inspect and port captured GPU shader binaries"
+  default_prompt: "Use $gpu-shader-toolkit to inspect a captured shader, preserve its evidence, and plan a verifiable cross-API port."

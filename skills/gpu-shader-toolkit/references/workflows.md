@@ -54,9 +54,21 @@
 4. 结合 `CreatePSOs.cpp`、`CommandLists_*.cpp`、`Descriptors_*.cpp`、resource 创建代码闭合语义。
 5. 如果需要进一步可读化，可尝试 DXIL -> SPIR-V -> SPIRV-Cross，但只标为辅助推断。
 
+## RenderDoc / GPA captured shader 移植
+
+1. 保留 capture 导出的原始 shader binary、entry point、stage、encoding 和 hash。
+2. 保存 disassembly 与 reflection，再生成目标语言源码；不要只保留 cross-compiled HLSL/MSL/GLSL。
+3. 把 shader 绑定回 capture 的 pipeline、descriptor、sampler、RT/UAV 格式和常量 buffer byte range。
+4. 读取 `captured-shader-porting.md`，建立常量语义表和 translation deviation 表。
+5. 用 `shader_port_manifest.py create` 记录 source、disassembly、reflection、translated source、engine adapter、工具版本和命令。
+6. 在目标引擎编译后运行 `shader_port_manifest.py verify`，并用中间 RT/数值对比证明 translated path，而不是显示一张 captured reference。
+
 ## 常见误区
 
 - `dxc -dumpbin` 的输出不能单独证明某个 texture 的业务含义；只能证明 shader 如何访问。
 - 反编译代码变量名通常不可信；可信的是 binding、格式、访问模式、数学结构和命令上下文。
 - SPIRV-Cross 输出的 HLSL/MSL 可能重排表达式；需要回到原始 disassembly 对关键结论做核对。
+- 不要从变量名或某次抓帧里的 `cNN/mNN` 名称直接命名光照、相机或时间语义；检查 byte offset、实际 load/use 和跨帧数值变化。
+- 不要用全局 UV flip 修复所有 API 差异；raw texture、generated RT、scene depth、view ray 和 final display 必须分层验证。
+- target API 不支持原 packed format 时，优先保留 raw bits 并显式解码，不要静默改成更高精度或不同色彩空间。
 - macOS/Windows 工具版本可能不同；跨平台结论要记录工具版本。

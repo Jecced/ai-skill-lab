@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "retrieved": "2026-07-10",
+  "platform": "win-x64",
+  "source": {
+    "product": "RenderDoc",
+    "version": "1.44",
+    "commit": "050034a0faa37d606ce1b8cf677dba4bc36984ea",
+    "path": "C:\\Program Files\\RenderDoc\\plugins\\spirv"
+  },
+  "tools": [
+    {
+      "name": "glslangValidator.exe",
+      "version": "glslang 16.2.0",
+      "size": 4783104,
+      "sha256": "B23ACC57B67231CA18C8006588ACCDCA4CBE9DEFDC9414039A09BA09A33DF370"
+    },
+    {
+      "name": "spirv-as.exe",
+      "version": "SPIRV-Tools v2026.1-91-g8d245e02",
+      "size": 416768,
+      "sha256": "C725DC59E7536180D29EFF42EE555D798779D0DDDDE75E2A63AF0CDBC7804E05"
+    },
+    {
+      "name": "spirv-cross.exe",
+      "version": "vulkan-sdk-1.4.341.0-44-gaa6354c4",
+      "size": 2216448,
+      "sha256": "78F48F3C988BB9F982E013BAB32F995C181BF8CAD080CFD8D1FFD3F66B5C00BE"
+    },
+    {
+      "name": "spirv-dis.exe",
+      "version": "SPIRV-Tools v2026.1-91-g8d245e02",
+      "size": 431104,
+      "sha256": "12D37FA6871744A687753C084C5192A1B01A05A0ED61EE55876A9F87AC085D08"
+    }
+  ],
+  "limitations": [
+    "This snapshot does not contain spirv-val or spirv-opt.",
+    "The binaries are unsigned and require the Microsoft Visual C++ 2015-2022 runtime."
+  ]
+}

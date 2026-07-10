@@ -1,0 +1,5 @@
+interface:
+  display_name: "RenderDoc MCP Skill"
+  short_description: "RenderDoc gateway and RDC evidence workflow"
+  default_prompt: "Use $renderdoc-mcp-skill to diagnose RenderDoc MCP and build an evidence package from a local RDC capture."
+

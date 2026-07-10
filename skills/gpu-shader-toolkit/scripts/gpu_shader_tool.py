@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import glob
 import json
-import os
 import platform
 import shutil
 import subprocess
@@ -173,15 +172,21 @@ def main() -> int:
     p.add_argument("--hlsl", action="store_true")
     p.add_argument("--msl", action="store_true")
     p.add_argument("--glsl", metavar="VERSION")
-    p.add_argument("extra", nargs=argparse.REMAINDER)
-    p.set_defaults(func=cmd_spirv_cross)
+    p.set_defaults(func=cmd_spirv_cross, extra=[], extra_passthrough=True)
 
     for name in ["glslang", "spirv-dis", "spirv-val", "spirv-as", "spirv-opt", "dxil-spirv"]:
         p = sub.add_parser(name, help=f"Pass through to {name}")
         p.add_argument("args", nargs=argparse.REMAINDER)
-        p.set_defaults(func=lambda a, tool_id=name: cmd_passthrough(tool_id, a))
+        p.set_defaults(func=lambda a, tool_id=name: cmd_passthrough(tool_id, a), passthrough=True)
 
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
+    if unknown:
+        if getattr(args, "passthrough", False):
+            args.args.extend(unknown)
+        elif getattr(args, "extra_passthrough", False):
+            args.extra.extend(unknown)
+        else:
+            parser.error("unrecognized arguments: " + " ".join(unknown))
     return args.func(args)
 
 

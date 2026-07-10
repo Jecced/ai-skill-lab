@@ -25,7 +25,8 @@
    ```powershell
    python skills/gpu-shader-toolkit/scripts/setup_shader_tools.py install --tool dxc
    ```
-5. SPIR-V 工具建议安装 Vulkan SDK，或把包管理器/源码构建出的 exe 加到 PATH。
+5. 仓库内置从 RenderDoc 1.44 提取并登记的 `glslangValidator`、`spirv-cross`、`spirv-dis`、`spirv-as`；wrapper 不再探测 RenderDoc 安装目录。
+6. `spirv-val` 与 `spirv-opt` 不在该最小集合内，继续从 PATH、Vulkan SDK 或显式登记的 toolchain 解析。
 
 ### macOS
 
