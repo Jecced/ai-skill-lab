@@ -1,0 +1,4 @@
+interface:
+  display_name: "Unity Global Installer"
+  short_description: "Repair Unity module installs cross-platform"
+  default_prompt: "Use $unity-global-installer to install or repair Unity Editor modules and validate the target platform."
