@@ -88,27 +88,6 @@ Copied subset:
 
 The official `platform-tools` folder was copied as a small complete runtime set because `adb.exe`, `fastboot.exe`, and helper tools depend on sibling DLLs, config files, and notices. The downloaded ZIP was not vendored.
 
-## Unity CLI Updater
-
-The `skills/unity-cli-skill` workflow downloads `unity-cli` binaries on demand from:
-
-`https://github.com/akiojin/unity-cli`
-
-Current release checked when the skill was created:
-
-- Release tag: `v0.12.0`
-- Release date: `2026-06-23T16:26:36Z`
-- License: MIT
-- Windows asset: `unity-cli-win-x64`
-- Manifest asset: `unity-cli-manifest.json`
-
-No `unity-cli` binary is committed by default. When `skills/unity-cli-skill/scripts/unity_cli_tool.py update-cli` is run with the default target, it writes the binary to:
-
-- `unity-cli/bin/unity-cli.exe` on Windows
-- `unity-cli/bin/unity-cli` on non-Windows platforms
-
-The updater verifies SHA256 from the upstream `unity-cli-manifest.json` and writes `unity-cli/VERSION.json`.
-
 ## 2026-06-30 macOS Toolchain Seed
 
 Copied from local source snapshot:
